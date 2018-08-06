@@ -41,7 +41,7 @@ while True:
     im_with_keypoints = cv2.drawKeypoints(im, keypoints, np.array([]), (0, 0, 255),
                                           cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
 
-    cv2.imshow("Dice Reader", im_with_keypoints)            # display the frame with keypoints added.
+    cv2.imshow('Dice Reader', im_with_keypoints)            # display the frame with keypoints added.
 
     reading = len(keypoints)                                # 'reading' counts the number of keypoints (pips).
 
@@ -53,30 +53,12 @@ while True:
 
         # if the most recent valid reading has changed, and it's something other than zero, then print it.
         if display[-1] != display[-2] and display[-1] != 0:
-            msg = str(display[-1]) + "\n****"
-            print(msg)
+            print('{}\n****'.format(display[-1]))
 
     counter += 1
 
     k = cv2.waitKey(30) & 0xff                              # press [Esc] to exit.
     if k == 27:
         break
-
-'''
-# this code prints coordinates of two keypoints. it could be expanded to track individual dice, detect when
-# dice are thrown, etc.
-
-    try:
-        x0 = keypoints[0].pt.x
-        y0 = keypoints[0].pt.y
-        x1 = keypoints[1].pt.x
-        y1 = keypoints[1].pt.y
-
-        msg = "x0: " + str(x0) + "\ny0: " + str(y0) + "\nx1: " + str(x1) + "\ny1: " + str(y1) + "\n\n\n\n\n\n"
-        print(msg)
-
-    except:
-        pass
-'''
 
 cv2.destroyAllWindows()                                     # since we exited the loop above, end the script.

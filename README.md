@@ -7,4 +7,4 @@ To accomplish this it uses OpenCV's built-in *SimpleBlobDetector*. The code is h
 
 **Video Demo:** [https://www.youtube.com/watch?v=lZBEsf6_XZ4](https://www.youtube.com/watch?v=lZBEsf6_XZ4)
 
-![Pips](images/dice.png)
+![Pips](images/video_clip.gif)

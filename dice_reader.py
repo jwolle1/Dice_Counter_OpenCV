@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from collections import deque
  
  
 min_threshold = 10                      # these values are used to filter our detector.
@@ -17,8 +18,8 @@ https://docs.opencv.org/3.4/d4/d15/group__videoio__flags__base.html
 '''
  
 counter = 0                             # script will use a counter to handle FPS.
-readings = [0, 0]                       # lists are used to track the number of pips.
-display = [0, 0]
+readings = deque([0, 0], maxlen=10)     # lists are used to track the number of pips.
+display = deque([0, 0], maxlen=10)
  
 while True:
     ret, im = cap.read()                                    # 'im' will be a frame from the video.
@@ -34,7 +35,7 @@ while True:
     params.minInertiaRatio = min_inertia_ratio
  
     detector = cv2.SimpleBlobDetector_create(params)        # create a blob detector object.
-	
+
     keypoints = detector.detect(im)                         # keypoints is a list containing the detected blobs.
  
     # here we draw keypoints on the frame.
@@ -43,17 +44,16 @@ while True:
  
     cv2.imshow("Dice Reader", im_with_keypoints)            # display the frame with keypoints added.
  
-    reading = len(keypoints)                                # 'reading' counts the number of keypoints (pips).
- 
     if counter % 10 == 0:                                   # enter this block every 10 frames.
-        readings.append(reading)                            # note the reading from this frame.
+        reading = len(keypoints)                            # 'reading' counts the number of keypoints (pips).
+        readings.append(reading)                            # record the reading from this frame.
  
         if readings[-1] == readings[-2] == readings[-3]:    # if the last 3 readings are the same...
             display.append(readings[-1])                    # ... then we have a valid reading.
  
         # if the most recent valid reading has changed, and it's something other than zero, then print it.
         if display[-1] != display[-2] and display[-1] != 0:
-            msg = "{}\n****".format(display[-1])
+            msg = f"{display[-1]}\n****"
             print(msg)
  
     counter += 1
@@ -70,11 +70,10 @@ while True:
         y0 = keypoints[0].pt.y
         x1 = keypoints[1].pt.x
         y1 = keypoints[1].pt.y
-        msg = "(x0, y0) = ({}, {})\n(x1, y1) = ({}, {})\n\n".format(x0, y0, x1, y1)
+        msg = f"(x0, y0) = ({x0}, {y0})\n(x1, y1) = ({x1}, {y1})\n\n"
         print(msg)
     except:
         pass
 '''
  
 cv2.destroyAllWindows()
-
